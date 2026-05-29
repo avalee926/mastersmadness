@@ -1,0 +1,852 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww14040\viewh10160\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="en">\
+<head>\
+<meta charset="UTF-8" />\
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />\
+<title>Senior Masters Pong Tournament \'97 Dartmouth '25</title>\
+<link rel="preconnect" href="https://fonts.googleapis.com" />\
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />\
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>\
+<style>\
+  /* \uc0\u9472 \u9472  CONFIG: paste your Supabase credentials below \u9472 \u9472  */\
+  :root \{\
+    --supabase-url: "";        /* e.g. https://xyzcompany.supabase.co */\
+    --supabase-anon-key: "";   /* your anon/public key */\
+  \}\
+\
+  *, *::before, *::after \{ box-sizing: border-box; margin: 0; padding: 0; \}\
+\
+  :root \{\
+    --green: #00693E;\
+    --green-dark: #004d2d;\
+    --green-light: #e8f5ee;\
+    --gold: #C8972B;\
+    --gold-light: #fdf6e3;\
+    --cream: #FAF8F3;\
+    --ink: #1a1a18;\
+    --ink-muted: #5a5a52;\
+    --ink-faint: #9a9a90;\
+    --border: rgba(0,0,0,0.1);\
+    --border-strong: rgba(0,0,0,0.2);\
+    --radius: 8px;\
+    --radius-lg: 12px;\
+  \}\
+\
+  html \{ font-size: 16px; \}\
+  body \{\
+    font-family: 'DM Sans', sans-serif;\
+    background: var(--cream);\
+    color: var(--ink);\
+    min-height: 100vh;\
+  \}\
+\
+  /* HEADER */\
+  .site-header \{\
+    background: var(--green);\
+    color: white;\
+    padding: 2rem 1.5rem 1.5rem;\
+    text-align: center;\
+    position: relative;\
+    overflow: hidden;\
+  \}\
+  .site-header::before \{\
+    content: '';\
+    position: absolute;\
+    inset: 0;\
+    background: repeating-linear-gradient(\
+      45deg,\
+      transparent,\
+      transparent 40px,\
+      rgba(255,255,255,0.03) 40px,\
+      rgba(255,255,255,0.03) 80px\
+    );\
+  \}\
+  .site-header h1 \{\
+    font-family: 'Bebas Neue', sans-serif;\
+    font-size: clamp(2.2rem, 6vw, 3.8rem);\
+    letter-spacing: 2px;\
+    line-height: 1;\
+    position: relative;\
+  \}\
+  .site-header h1 span \{ color: var(--gold); \}\
+  .site-header p \{\
+    font-size: 13px;\
+    opacity: 0.75;\
+    margin-top: 6px;\
+    letter-spacing: 1px;\
+    text-transform: uppercase;\
+    position: relative;\
+  \}\
+  .scoring-pills \{\
+    display: flex;\
+    gap: 6px;\
+    flex-wrap: wrap;\
+    justify-content: center;\
+    margin-top: 14px;\
+    position: relative;\
+  \}\
+  .scoring-pill \{\
+    background: rgba(255,255,255,0.12);\
+    border: 1px solid rgba(255,255,255,0.2);\
+    border-radius: 20px;\
+    padding: 3px 10px;\
+    font-size: 11px;\
+    color: rgba(255,255,255,0.85);\
+  \}\
+\
+  /* NAV */\
+  .tab-nav \{\
+    display: flex;\
+    background: white;\
+    border-bottom: 1px solid var(--border);\
+    position: sticky;\
+    top: 0;\
+    z-index: 100;\
+  \}\
+  .tab-btn \{\
+    flex: 1;\
+    padding: 14px 8px;\
+    font-family: 'DM Sans', sans-serif;\
+    font-size: 13px;\
+    font-weight: 500;\
+    border: none;\
+    background: transparent;\
+    color: var(--ink-muted);\
+    cursor: pointer;\
+    border-bottom: 2px solid transparent;\
+    transition: all 0.15s;\
+    letter-spacing: 0.3px;\
+  \}\
+  .tab-btn.active \{\
+    color: var(--green);\
+    border-bottom-color: var(--green);\
+  \}\
+\
+  /* MAIN LAYOUT */\
+  .main \{ max-width: 1200px; margin: 0 auto; padding: 1.5rem; \}\
+  .section \{ display: none; \}\
+  .section.active \{ display: block; \}\
+\
+  /* BRACKET */\
+  .bracket-wrap \{ overflow-x: auto; padding-bottom: 1rem; \}\
+  .bracket-grid \{ display: flex; min-width: 860px; gap: 0; \}\
+  .round-col \{ display: flex; flex-direction: column; flex: 1; min-width: 130px; \}\
+  .round-hdr \{\
+    font-size: 10px;\
+    font-weight: 600;\
+    text-transform: uppercase;\
+    letter-spacing: 0.8px;\
+    color: var(--ink-faint);\
+    text-align: center;\
+    padding: 8px 4px;\
+    border-bottom: 1px solid var(--border);\
+    margin-bottom: 6px;\
+  \}\
+  .round-matches \{ display: flex; flex-direction: column; flex: 1; \}\
+  .match-slot \{\
+    display: flex;\
+    flex-direction: column;\
+    justify-content: center;\
+    padding: 3px 4px;\
+  \}\
+  .match-card \{\
+    background: white;\
+    border: 1px solid var(--border);\
+    border-radius: var(--radius);\
+    overflow: hidden;\
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);\
+  \}\
+  .team-btn \{\
+    width: 100%;\
+    padding: 6px 8px;\
+    font-family: 'DM Sans', sans-serif;\
+    font-size: 11px;\
+    text-align: left;\
+    border: none;\
+    background: transparent;\
+    cursor: pointer;\
+    display: flex;\
+    align-items: center;\
+    gap: 5px;\
+    color: var(--ink);\
+    transition: background 0.1s;\
+    border-bottom: 1px solid var(--border);\
+    white-space: nowrap;\
+    overflow: hidden;\
+    text-overflow: ellipsis;\
+  \}\
+  .team-btn:last-child \{ border-bottom: none; \}\
+  .team-btn:hover \{ background: #f5f5f0; \}\
+  .team-btn.selected \{ background: #e8f5ee; color: var(--green-dark); font-weight: 600; \}\
+  .team-btn.winner \{ background: var(--gold-light); color: #7a5a00; font-weight: 600; \}\
+  .team-btn.tbd \{ color: var(--ink-faint); font-style: italic; cursor: default; \}\
+  .team-btn.eliminated \{ opacity: 0.45; \}\
+  .seed-num \{ font-size: 9px; color: var(--ink-faint); min-width: 12px; flex-shrink: 0; \}\
+  .team-btn.selected .seed-num \{ color: var(--green); \}\
+  .team-btn.winner .seed-num \{ color: var(--gold); \}\
+\
+  /* FORM */\
+  .submit-panel \{\
+    background: white;\
+    border: 1px solid var(--border);\
+    border-radius: var(--radius-lg);\
+    padding: 1.5rem;\
+    margin-top: 1.5rem;\
+    max-width: 480px;\
+  \}\
+  .submit-panel h2 \{ font-size: 16px; font-weight: 600; margin-bottom: 1rem; \}\
+  .field \{ margin-bottom: 12px; \}\
+  .field label \{ display: block; font-size: 12px; font-weight: 500; color: var(--ink-muted); margin-bottom: 4px; \}\
+  .field input \{\
+    width: 100%;\
+    padding: 10px 12px;\
+    font-family: 'DM Sans', sans-serif;\
+    font-size: 14px;\
+    border: 1px solid var(--border-strong);\
+    border-radius: var(--radius);\
+    background: var(--cream);\
+    color: var(--ink);\
+    outline: none;\
+    transition: border-color 0.15s;\
+  \}\
+  .field input:focus \{ border-color: var(--green); \}\
+  .btn-primary \{\
+    width: 100%;\
+    padding: 12px;\
+    background: var(--green);\
+    color: white;\
+    border: none;\
+    border-radius: var(--radius);\
+    font-family: 'DM Sans', sans-serif;\
+    font-size: 14px;\
+    font-weight: 600;\
+    cursor: pointer;\
+    transition: background 0.15s;\
+    letter-spacing: 0.3px;\
+  \}\
+  .btn-primary:hover \{ background: var(--green-dark); \}\
+  .btn-primary:disabled \{ background: #aaa; cursor: not-allowed; \}\
+  .pick-status \{\
+    font-size: 12px;\
+    color: var(--ink-muted);\
+    text-align: center;\
+    margin: 10px 0 0;\
+  \}\
+  .pick-status strong \{ color: var(--ink); \}\
+  .venmo-note \{\
+    margin-top: 12px;\
+    background: var(--gold-light);\
+    border: 1px solid #e8d48a;\
+    border-radius: var(--radius);\
+    padding: 10px 14px;\
+    font-size: 12px;\
+    color: #7a5a00;\
+    text-align: center;\
+  \}\
+  .msg-success \{\
+    margin-top: 10px;\
+    background: var(--green-light);\
+    border: 1px solid #7dcca0;\
+    border-radius: var(--radius);\
+    padding: 10px 14px;\
+    font-size: 13px;\
+    color: var(--green-dark);\
+    text-align: center;\
+  \}\
+  .msg-error \{\
+    margin-top: 10px;\
+    background: #fdecea;\
+    border: 1px solid #f5a9a9;\
+    border-radius: var(--radius);\
+    padding: 10px 14px;\
+    font-size: 13px;\
+    color: #8b1c1c;\
+    text-align: center;\
+  \}\
+\
+  /* LEADERBOARD */\
+  .lb-meta \{\
+    display: flex;\
+    gap: 1rem;\
+    margin-bottom: 1.5rem;\
+    flex-wrap: wrap;\
+  \}\
+  .lb-stat \{\
+    background: white;\
+    border: 1px solid var(--border);\
+    border-radius: var(--radius-lg);\
+    padding: 1rem 1.25rem;\
+    flex: 1;\
+    min-width: 120px;\
+  \}\
+  .lb-stat-label \{ font-size: 11px; font-weight: 500; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.5px; \}\
+  .lb-stat-value \{ font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--green); letter-spacing: 1px; margin-top: 2px; \}\
+  .lb-table \{ width: 100%; border-collapse: collapse; background: white; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); \}\
+  .lb-table th \{ font-size: 11px; font-weight: 600; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 16px; text-align: left; background: #f9f8f4; border-bottom: 1px solid var(--border); \}\
+  .lb-table th:last-child \{ text-align: right; \}\
+  .lb-table td \{ padding: 12px 16px; font-size: 14px; border-bottom: 1px solid var(--border); color: var(--ink); \}\
+  .lb-table td:last-child \{ text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; \}\
+  .lb-table tr:last-child td \{ border-bottom: none; \}\
+  .lb-table tr:hover td \{ background: #fafaf6; \}\
+  .rank \{ display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-size: 11px; font-weight: 600; background: #f0ede4; color: var(--ink-muted); \}\
+  .rank.r1 \{ background: var(--gold); color: white; \}\
+  .rank.r2 \{ background: #c0bfbb; color: white; \}\
+  .rank.r3 \{ background: #c88a5e; color: white; \}\
+  .empty \{ text-align: center; padding: 3rem; color: var(--ink-faint); font-size: 14px; \}\
+\
+  /* ADMIN */\
+  .admin-login-wrap \{ max-width: 340px; margin: 3rem auto; \}\
+  .admin-login-wrap h2 \{ font-size: 18px; font-weight: 600; margin-bottom: 1.5rem; \}\
+  .admin-section-title \{ font-size: 13px; font-weight: 600; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; \}\
+  .admin-rounds \{ display: flex; flex-direction: column; gap: 1.5rem; \}\
+  .admin-round-block \{ background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; \}\
+  .admin-round-title \{ font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); \}\
+  .admin-matches-grid \{ display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; \}\
+  .admin-match \{ \}\
+  .admin-match-label \{ font-size: 10px; color: var(--ink-faint); font-weight: 500; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; \}\
+  .admin-match-btns \{ display: flex; flex-direction: column; gap: 3px; \}\
+  .admin-win-btn \{\
+    width: 100%;\
+    padding: 6px 8px;\
+    font-family: 'DM Sans', sans-serif;\
+    font-size: 12px;\
+    border: 1px solid var(--border-strong);\
+    border-radius: var(--radius);\
+    cursor: pointer;\
+    background: var(--cream);\
+    color: var(--ink);\
+    text-align: left;\
+    transition: all 0.1s;\
+    white-space: nowrap;\
+    overflow: hidden;\
+    text-overflow: ellipsis;\
+  \}\
+  .admin-win-btn.active \{ background: var(--gold-light); border-color: var(--gold); color: #7a5a00; font-weight: 600; \}\
+  .admin-win-btn:hover:not(.active):not(:disabled) \{ background: var(--green-light); border-color: var(--green); \}\
+  .admin-win-btn:disabled \{ opacity: 0.4; cursor: not-allowed; \}\
+  .admin-stats-grid \{ display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-bottom: 1.5rem; \}\
+  .admin-logout \{ font-size: 12px; padding: 6px 14px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: transparent; cursor: pointer; color: var(--ink-muted); \}\
+  .admin-logout:hover \{ background: #fdecea; border-color: #f5a9a9; color: #8b1c1c; \}\
+  .admin-top \{ display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; \}\
+  .loading \{ text-align: center; padding: 2rem; color: var(--ink-faint); \}\
+\
+  /* SETUP NOTICE */\
+  .setup-notice \{\
+    background: #fff8e6;\
+    border: 1px solid #e8d48a;\
+    border-radius: var(--radius-lg);\
+    padding: 1.25rem;\
+    margin-bottom: 1.5rem;\
+    font-size: 13px;\
+    color: #7a5a00;\
+  \}\
+  .setup-notice strong \{ display: block; margin-bottom: 6px; font-size: 14px; \}\
+  .setup-notice code \{ background: rgba(0,0,0,0.07); padding: 1px 5px; border-radius: 3px; font-size: 12px; font-family: monospace; \}\
+\
+  @media (max-width: 600px) \{\
+    .main \{ padding: 1rem; \}\
+    .lb-meta \{ flex-direction: column; \}\
+  \}\
+</style>\
+</head>\
+<body>\
+\
+<header class="site-header">\
+  <h1>\uc0\u55356 \u57299  Senior Masters <span>Pong</span> Tournament</h1>\
+  <p>Dartmouth College \'b7 Class of 2025</p>\
+  <div class="scoring-pills">\
+    <span class="scoring-pill">R64: 1pt</span>\
+    <span class="scoring-pill">R32: 2pts</span>\
+    <span class="scoring-pill">Sweet 16: 4pts</span>\
+    <span class="scoring-pill">Elite 8: 8pts</span>\
+    <span class="scoring-pill">Final 4: 16pts</span>\
+    <span class="scoring-pill">Champ: 32pts</span>\
+  </div>\
+</header>\
+\
+<nav class="tab-nav">\
+  <button class="tab-btn active" onclick="switchTab('bracket', this)">Pick Bracket</button>\
+  <button class="tab-btn" onclick="switchTab('leaderboard', this)">Leaderboard</button>\
+  <button class="tab-btn" onclick="switchTab('admin', this)">Admin</button>\
+</nav>\
+\
+<main class="main">\
+\
+  <!-- BRACKET TAB -->\
+  <div id="tab-bracket" class="section active">\
+    <div id="setup-banner" class="setup-notice" style="display:none">\
+      <strong>\uc0\u9881 \u65039  Setup required</strong>\
+      Open this file in a text editor and replace the two placeholder values near the top of the &lt;script&gt; tag:<br><br>\
+      <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code> \'97 get these from your Supabase project settings.\
+    </div>\
+    <div class="bracket-wrap">\
+      <div class="bracket-grid" id="bracket-grid"></div>\
+    </div>\
+    <div class="submit-panel">\
+      <h2>Submit your bracket</h2>\
+      <div class="field">\
+        <label>Your name</label>\
+        <input type="text" id="sub-name" placeholder="e.g. Alex Smith" />\
+      </div>\
+      <div class="field">\
+        <label>Your email</label>\
+        <input type="email" id="sub-email" placeholder="you@dartmouth.edu" />\
+      </div>\
+      <button class="btn-primary" id="submit-btn" disabled onclick="submitBracket()">Submit Bracket</button>\
+      <p class="pick-status" id="pick-status"><strong>0</strong> / 63 picks made</p>\
+      <div class="venmo-note">\uc0\u55357 \u56504  Send $5 to <strong>@YOUR-VENMO-HERE</strong> with memo "Pong Bracket \'b7 [Your Name]"</div>\
+      <div id="submit-msg"></div>\
+    </div>\
+  </div>\
+\
+  <!-- LEADERBOARD TAB -->\
+  <div id="tab-leaderboard" class="section">\
+    <div class="lb-meta">\
+      <div class="lb-stat">\
+        <div class="lb-stat-label">Entries</div>\
+        <div class="lb-stat-value" id="lb-entries">\'97</div>\
+      </div>\
+      <div class="lb-stat">\
+        <div class="lb-stat-label">Prize Pool</div>\
+        <div class="lb-stat-value" id="lb-pool">\'97</div>\
+      </div>\
+      <div class="lb-stat">\
+        <div class="lb-stat-label">Games Played</div>\
+        <div class="lb-stat-value" id="lb-games">\'97</div>\
+      </div>\
+    </div>\
+    <div id="leaderboard-body"><div class="loading">Loading standings\'85</div></div>\
+  </div>\
+\
+  <!-- ADMIN TAB -->\
+  <div id="tab-admin" class="section">\
+    <div id="admin-login-area">\
+      <div class="admin-login-wrap">\
+        <h2>Admin login</h2>\
+        <div class="field">\
+          <label>Password</label>\
+          <input type="password" id="admin-pw" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')adminLogin()" />\
+        </div>\
+        <button class="btn-primary" onclick="adminLogin()">Log in</button>\
+        <div id="admin-login-msg"></div>\
+      </div>\
+    </div>\
+    <div id="admin-panel" style="display:none">\
+      <div class="admin-top">\
+        <div>\
+          <div style="font-size:18px;font-weight:600">Tournament admin</div>\
+          <div style="font-size:13px;color:var(--ink-muted);margin-top:2px">Click a team to record them as the winner. Click again to undo.</div>\
+        </div>\
+        <button class="admin-logout" onclick="adminLogout()">Log out</button>\
+      </div>\
+      <div class="admin-stats-grid" id="admin-stats-grid"></div>\
+      <div class="admin-rounds" id="admin-rounds"></div>\
+    </div>\
+  </div>\
+\
+</main>\
+\
+<script>\
+// \uc0\u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \
+// CONFIGURATION \'97 edit these three values\
+// \uc0\u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \
+const SUPABASE_URL     = "https://chzkvqnzgyempugdzsmb.supabase.co/rest/v1/";       // https://xxxx.supabase.co\
+const SUPABASE_ANON_KEY = "chzkvqnzgyempugdzsmb"; // eyJhbGci...\
+const ADMIN_PASSWORD   = \'93DartBase\'94Wins!;                // change this!\
+const VENMO_HANDLE     = \'93@nico_banez\'94;        // your venmo\
+// \uc0\u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \u9552 \
+\
+const ROUND_NAMES = ["Round of 64","Round of 32","Sweet 16","Elite 8","Final Four","Championship"];\
+const ROUND_PTS   = [1, 2, 4, 8, 16, 32];\
+\
+// Default teams \'97 replace with real team names before launching\
+// Format: 32 pairs = 64 teams, [team1, team2] per first-round matchup\
+const TEAMS = [\
+  ["Beer Pressure","Keg Stand Kings"],\
+  ["Brew Crew","Pong Ponies"],\
+  ["Net Gains","Foam & Fury"],\
+  ["Splash Bros","The Dampeners"],\
+  ["Liquid Legends","Rim Rockers"],\
+  ["Tabled & Able","Bounce House"],\
+  ["Cup Crushers","Elbow Room"],\
+  ["Wet Set","Sinkers"],\
+  ["Shot Callers","Airball Ale"],\
+  ["Hoppy Campers","The Rinsers"],\
+  ["Last Splash","Thirsty Thirds"],\
+  ["Grip & Sip","Corner Pocket"],\
+  ["Paddle Up","Free Throws"],\
+  ["On the Rocks","Overtime"],\
+  ["Full Send","Backboard Boys"],\
+  ["Frat Physics","The Plungers"],\
+  ["Bounce Theory","Rack Attackers"],\
+  ["Suds & Duds","Elbow Grease"],\
+  ["The Pongers","Cup Half Full"],\
+  ["Table Turners","Rim Jobs"],\
+  ["Ace in the Hole","The Spillers"],\
+  ["Deep Cups","Swish & Sip"],\
+  ["The Launchers","Dunk Tank"],\
+  ["High Arc","Wet Dream Team"],\
+  ["Ball & Chain","Ping Pong Diplomacy"],\
+  ["The Drainers","Steady Hands"],\
+  ["Angle Grinders","Backspin Boys"],\
+  ["Sip Sip Pass","Foam Rangers"],\
+  ["Arc Angels","Two Cups No Rules"],\
+  ["The Dunkers","Overflow"],\
+  ["Chaos Pong","Final Drip"],\
+  ["Alpha Bounce","Pong Fathers"],\
+];\
+\
+// \uc0\u9472 \u9472  STATE \u9472 \u9472 \
+let db = null;\
+let results = \{\};      // \{ matchId: winnerName \}\
+let userPicks = \{\};    // current user's in-progress picks\
+let submissions = [];  // cached from DB\
+let isAdmin = false;\
+\
+// \uc0\u9472 \u9472  SUPABASE INIT \u9472 \u9472 \
+function initDB() \{\
+  if (SUPABASE_URL === "YOUR_SUPABASE_URL") \{\
+    document.getElementById('setup-banner').style.display = 'block';\
+    return false;\
+  \}\
+  try \{\
+    db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);\
+    return true;\
+  \} catch(e) \{\
+    console.error('Supabase init failed:', e);\
+    return false;\
+  \}\
+\}\
+\
+// \uc0\u9472 \u9472  HELPERS \u9472 \u9472 \
+function mid(r, m) \{ return `r$\{r\}_m$\{m\}`; \}\
+function totalMatches() \{ return 63; \}\
+\
+function getMatchup(r, m) \{\
+  if (r === 0) \{\
+    return \{ t1: TEAMS[m][0], t2: TEAMS[m][1], seed1: m*2+1, seed2: m*2+2 \};\
+  \}\
+  const t1 = results[mid(r-1, m*2)] || null;\
+  const t2 = results[mid(r-1, m*2+1)] || null;\
+  return \{ t1, t2, seed1: null, seed2: null \};\
+\}\
+\
+function getPickMatchup(r, m) \{\
+  if (r === 0) return \{ t1: TEAMS[m][0], t2: TEAMS[m][1] \};\
+  const t1 = userPicks[mid(r-1, m*2)] || null;\
+  const t2 = userPicks[mid(r-1, m*2+1)] || null;\
+  return \{ t1, t2 \};\
+\}\
+\
+function scoreSubmission(picks) \{\
+  let score = 0;\
+  for (let r = 0; r < 6; r++) \{\
+    const count = 32 / Math.pow(2, r);\
+    for (let m = 0; m < count; m++) \{\
+      const id = mid(r, m);\
+      if (results[id] && picks[id] === results[id]) score += ROUND_PTS[r];\
+    \}\
+  \}\
+  return score;\
+\}\
+\
+// \uc0\u9472 \u9472  BRACKET RENDER \u9472 \u9472 \
+function renderBracket() \{\
+  const grid = document.getElementById('bracket-grid');\
+  grid.innerHTML = '';\
+  for (let r = 0; r < 6; r++) \{\
+    const count = 32 / Math.pow(2, r);\
+    const col = document.createElement('div');\
+    col.className = 'round-col';\
+    col.innerHTML = `<div class="round-hdr">$\{ROUND_NAMES[r]\}</div>`;\
+    const matches = document.createElement('div');\
+    matches.className = 'round-matches';\
+    col.appendChild(matches);\
+\
+    for (let m = 0; m < count; m++) \{\
+      const \{ t1, t2, seed1, seed2 \} = getMatchup(r, m);\
+      const \{ t1: p1, t2: p2 \} = getPickMatchup(r, m);\
+      const actualWinner = results[mid(r, m)];\
+      const userPick = userPicks[mid(r, m)];\
+\
+      const slot = document.createElement('div');\
+      slot.className = 'match-slot';\
+      slot.style.flex = String(Math.pow(2, r));\
+\
+      const card = document.createElement('div');\
+      card.className = 'match-card';\
+\
+      [[p1, seed1], [p2, seed2]].forEach(([name, seed]) => \{\
+        const btn = document.createElement('button');\
+        btn.className = 'team-btn';\
+        if (!name) \{ btn.classList.add('tbd'); btn.disabled = true; \}\
+        else if (actualWinner && actualWinner !== name) btn.classList.add('eliminated');\
+        else if (actualWinner === name) btn.classList.add('winner');\
+        else if (userPick === name) btn.classList.add('selected');\
+\
+        const s = document.createElement('span');\
+        s.className = 'seed-num';\
+        s.textContent = seed || '';\
+        btn.appendChild(s);\
+        btn.appendChild(document.createTextNode(name || 'TBD'));\
+\
+        if (name && !actualWinner) \{\
+          btn.onclick = () => \{ onPick(r, m, name); \};\
+        \}\
+        card.appendChild(btn);\
+      \});\
+\
+      slot.appendChild(card);\
+      matches.appendChild(slot);\
+    \}\
+    grid.appendChild(col);\
+  \}\
+\}\
+\
+function onPick(r, m, team) \{\
+  userPicks[mid(r, m)] = team;\
+  // clear downstream picks that are now invalid\
+  invalidateDownstream(r, m);\
+  renderBracket();\
+  updatePickStatus();\
+\}\
+\
+function invalidateDownstream(r, m) \{\
+  if (r >= 5) return;\
+  const nr = r + 1, nm = Math.floor(m / 2);\
+  const \{ t1, t2 \} = getPickMatchup(nr, nm);\
+  const cur = userPicks[mid(nr, nm)];\
+  if (cur && cur !== t1 && cur !== t2) \{\
+    delete userPicks[mid(nr, nm)];\
+    invalidateDownstream(nr, nm);\
+  \}\
+\}\
+\
+function updatePickStatus() \{\
+  const made = Object.keys(userPicks).length;\
+  const total = totalMatches();\
+  const btn = document.getElementById('submit-btn');\
+  const el = document.getElementById('pick-status');\
+  if (made >= total) \{\
+    el.innerHTML = '\uc0\u10003  All picks made \'97 ready to submit!';\
+    btn.disabled = false;\
+  \} else \{\
+    el.innerHTML = `<strong>$\{made\}</strong> / $\{total\} picks made`;\
+    btn.disabled = true;\
+  \}\
+\}\
+\
+// \uc0\u9472 \u9472  SUBMIT \u9472 \u9472 \
+async function submitBracket() \{\
+  const name  = document.getElementById('sub-name').value.trim();\
+  const email = document.getElementById('sub-email').value.trim();\
+  const msgEl = document.getElementById('submit-msg');\
+  msgEl.innerHTML = '';\
+\
+  if (!name || !email) \{\
+    msgEl.innerHTML = '<div class="msg-error">Please enter your name and email.</div>';\
+    return;\
+  \}\
+  if (Object.keys(userPicks).length < totalMatches()) \{\
+    msgEl.innerHTML = '<div class="msg-error">Please complete all 63 picks first.</div>';\
+    return;\
+  \}\
+\
+  const btn = document.getElementById('submit-btn');\
+  btn.disabled = true;\
+  btn.textContent = 'Submitting\'85';\
+\
+  const entry = \{ name, email, picks: userPicks, score: 0, submitted_at: new Date().toISOString() \};\
+\
+  if (db) \{\
+    const \{ error \} = await db.from('submissions').insert([entry]);\
+    if (error) \{\
+      msgEl.innerHTML = `<div class="msg-error">Error: $\{error.message\}</div>`;\
+      btn.disabled = false;\
+      btn.textContent = 'Submit Bracket';\
+      return;\
+    \}\
+  \} else \{\
+    // fallback: store locally if no DB\
+    submissions.push(entry);\
+  \}\
+\
+  msgEl.innerHTML = `<div class="msg-success">\uc0\u55356 \u57225  Bracket submitted, $\{name\}! Don't forget to Venmo $\{VENMO_HANDLE\}.</div>`;\
+  btn.textContent = 'Submitted!';\
+  document.getElementById('sub-name').value = '';\
+  document.getElementById('sub-email').value = '';\
+  userPicks = \{\};\
+  renderBracket();\
+  updatePickStatus();\
+  setTimeout(() => \{ btn.disabled = true; btn.textContent = 'Submit Bracket'; \}, 3000);\
+\}\
+\
+// \uc0\u9472 \u9472  LEADERBOARD \u9472 \u9472 \
+async function loadLeaderboard() \{\
+  document.getElementById('leaderboard-body').innerHTML = '<div class="loading">Loading standings\'85</div>';\
+  if (db) \{\
+    const \{ data, error \} = await db.from('submissions').select('name, picks, submitted_at');\
+    if (!error && data) submissions = data;\
+  \}\
+\
+  const \{ data: resData \} = db ? await db.from('results').select('match_id, winner') : \{ data: [] \};\
+  if (resData) \{\
+    results = \{\};\
+    resData.forEach(r => \{ results[r.match_id] = r.winner; \});\
+    renderBracket();\
+  \}\
+\
+  const scored = submissions.map(s => (\{ ...s, score: scoreSubmission(s.picks || \{\}) \}))\
+    .sort((a, b) => b.score - a.score || new Date(a.submitted_at) - new Date(b.submitted_at));\
+\
+  const gamesPlayed = Object.keys(results).length;\
+  document.getElementById('lb-entries').textContent = scored.length;\
+  document.getElementById('lb-pool').textContent = `$$\{scored.length * 5\}`;\
+  document.getElementById('lb-games').textContent = `$\{gamesPlayed\}/63`;\
+\
+  if (scored.length === 0) \{\
+    document.getElementById('leaderboard-body').innerHTML = '<div class="empty">No entries yet \'97 be the first!</div>';\
+    return;\
+  \}\
+\
+  const rankClass = i => i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : '';\
+  document.getElementById('leaderboard-body').innerHTML = `\
+    <table class="lb-table">\
+      <thead><tr><th>#</th><th>Name</th><th>Score</th></tr></thead>\
+      <tbody>\
+        $\{scored.map((s, i) => `\
+          <tr>\
+            <td><span class="rank $\{rankClass(i)\}">$\{i+1\}</span></td>\
+            <td>$\{escHtml(s.name)\}</td>\
+            <td>$\{s.score\} pts</td>\
+          </tr>\
+        `).join('')\}\
+      </tbody>\
+    </table>\
+  `;\
+\}\
+\
+// \uc0\u9472 \u9472  ADMIN \u9472 \u9472 \
+function adminLogin() \{\
+  const pw = document.getElementById('admin-pw').value;\
+  if (pw !== ADMIN_PASSWORD) \{\
+    document.getElementById('admin-login-msg').innerHTML = '<div class="msg-error" style="margin-top:8px">Incorrect password.</div>';\
+    return;\
+  \}\
+  isAdmin = true;\
+  document.getElementById('admin-login-area').style.display = 'none';\
+  document.getElementById('admin-panel').style.display = 'block';\
+  renderAdmin();\
+\}\
+\
+function adminLogout() \{\
+  isAdmin = false;\
+  document.getElementById('admin-panel').style.display = 'none';\
+  document.getElementById('admin-login-area').style.display = 'block';\
+  document.getElementById('admin-pw').value = '';\
+\}\
+\
+async function loadResults() \{\
+  if (!db) return;\
+  const \{ data \} = await db.from('results').select('match_id, winner');\
+  if (data) \{ results = \{\}; data.forEach(r => \{ results[r.match_id] = r.winner; \}); \}\
+\}\
+\
+function renderAdmin() \{\
+  const gamesPlayed = Object.keys(results).length;\
+  document.getElementById('admin-stats-grid').innerHTML = `\
+    <div class="lb-stat"><div class="lb-stat-label">Entries</div><div class="lb-stat-value">$\{submissions.length\}</div></div>\
+    <div class="lb-stat"><div class="lb-stat-label">Prize pool</div><div class="lb-stat-value">$$\{submissions.length * 5\}</div></div>\
+    <div class="lb-stat"><div class="lb-stat-label">Games recorded</div><div class="lb-stat-value">$\{gamesPlayed\}/63</div></div>\
+  `;\
+\
+  const container = document.getElementById('admin-rounds');\
+  container.innerHTML = '';\
+\
+  for (let r = 0; r < 6; r++) \{\
+    const count = 32 / Math.pow(2, r);\
+    const block = document.createElement('div');\
+    block.className = 'admin-round-block';\
+    block.innerHTML = `<div class="admin-round-title">$\{ROUND_NAMES[r]\} <span style="font-weight:400;color:var(--ink-muted);font-size:12px">\'b7 $\{ROUND_PTS[r]\} pt$\{ROUND_PTS[r]>1?'s':''\} per win</span></div>`;\
+    const grid = document.createElement('div');\
+    grid.className = 'admin-matches-grid';\
+\
+    for (let m = 0; m < count; m++) \{\
+      const \{ t1, t2 \} = getMatchup(r, m);\
+      const winner = results[mid(r, m)];\
+      const matchDiv = document.createElement('div');\
+      matchDiv.className = 'admin-match';\
+      matchDiv.innerHTML = `<div class="admin-match-label">Match $\{m+1\}</div>`;\
+      const btns = document.createElement('div');\
+      btns.className = 'admin-match-btns';\
+      [t1, t2].forEach(name => \{\
+        const btn = document.createElement('button');\
+        btn.className = 'admin-win-btn' + (winner === name ? ' active' : '');\
+        btn.textContent = name || 'TBD';\
+        btn.disabled = !name;\
+        btn.onclick = () => recordResult(r, m, name);\
+        btns.appendChild(btn);\
+      \});\
+      matchDiv.appendChild(btns);\
+      grid.appendChild(matchDiv);\
+    \}\
+    block.appendChild(grid);\
+    container.appendChild(block);\
+  \}\
+\}\
+\
+async function recordResult(r, m, team) \{\
+  const id = mid(r, m);\
+  let newWinner;\
+  if (results[id] === team) \{\
+    delete results[id];\
+    newWinner = null;\
+  \} else \{\
+    results[id] = team;\
+    newWinner = team;\
+  \}\
+\
+  if (db) \{\
+    if (newWinner) \{\
+      await db.from('results').upsert([\{ match_id: id, winner: newWinner \}], \{ onConflict: 'match_id' \});\
+    \} else \{\
+      await db.from('results').delete().eq('match_id', id);\
+    \}\
+  \}\
+\
+  renderAdmin();\
+  renderBracket();\
+\}\
+\
+// \uc0\u9472 \u9472  TABS \u9472 \u9472 \
+function switchTab(tab, btnEl) \{\
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));\
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));\
+  btnEl.classList.add('active');\
+  document.getElementById(`tab-$\{tab\}`).classList.add('active');\
+  if (tab === 'leaderboard') loadLeaderboard();\
+  if (tab === 'admin' && isAdmin) \{ loadResults().then(renderAdmin); \}\
+\}\
+\
+function escHtml(str) \{\
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');\
+\}\
+\
+// \uc0\u9472 \u9472  BOOT \u9472 \u9472 \
+(async () => \{\
+  initDB();\
+  if (db) await loadResults();\
+  renderBracket();\
+  updatePickStatus();\
+\})();\
+</script>\
+</body>\
+</html>}
